@@ -1,0 +1,48 @@
+QPushButton {
+    border-radius: 5px;
+    padding: 5px;
+    border: 0px solid #8f8f91;
+    background-color: #2596be;
+    color: white;
+}
+QPushButton#delete-button {
+    border-radius: 5px;
+    padding: 5px;
+    border: 0px solid #8f8f91;
+    background-color: red;
+    color: white;
+}
+QLineEdit {
+    border-radius: 5px;
+    padding: 5px;
+    border: 1px solid #8f8f91;
+}
+QLineEdit:disabled {
+    background-color: #E8E8E8;
+    color: black;
+}
+QLabel {
+    font-size: 15px;
+}
+QLabel#title {
+    font-size: 30px;
+    font-weight: bold;
+}
+QLabel#heading {
+    font-size: 20px;
+    font-weight: bold;
+}
+QPushButton:pressed {
+    background-color: darkblue;
+    border-style: inset
+}
+QPushButton:disabled {
+    background-color: darkgray;
+}
+QPushButton:hover {
+    background-color: #1181A9;
+}
+QComboxBox {
+    background-color: white;
+    border-radius: 5px;
+}
