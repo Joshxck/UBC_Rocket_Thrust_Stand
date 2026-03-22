@@ -1,6 +1,6 @@
 # main.py
 
-from PySide6.QtWidgets import QApplication, QDialog
+from PySide6.QtWidgets import QApplication
 
 from src.main_window import MainWindow
 from pathlib import Path
