@@ -106,7 +106,7 @@ class ConnectionWidget(QWidget):
  
         # self.serial_port = port
         self._lock_controls()
-        # self._set_status(f"Connected:  {device}  @  {self.BAUD_RATE} baud")
+        self._set_status(f"Connected:  {device}")
         self.connection_established.emit(device)
 
 
