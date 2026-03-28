@@ -109,8 +109,6 @@ class MainWindow(QMainWindow):
         self.main_layout.addLayout(self.second_row)
 
 
-
-
     def on_connected(self, device:str):
         self.worker = SerialWorker(device)
         self.worker.data_received.connect(self.handle_data)
