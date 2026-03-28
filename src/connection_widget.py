@@ -30,6 +30,7 @@ class ConnectionWidget(QWidget):
         connect_row = QHBoxLayout(self)
 
         port_label = QLabel("Port: ")
+        port_label.setFixedSize(50, 20)
 
         self.combo = QComboBox()
         self.combo.setMinimumWidth(180)

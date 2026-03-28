@@ -68,7 +68,7 @@ class _GraphWidget(QWidget):
         super().__init__(parent)
         self.streams = streams
         self.history_seconds = history_seconds
-        self.setFixedSize(450, 250)
+        self.setFixedSize(400, 200)
         # self.setMinimumSize(200, 100)
         # self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
 
@@ -175,7 +175,7 @@ class _GraphWidget(QWidget):
 class _ReadoutPanel(QWidget):
     def __init__(self, streams: List[_StreamData], parent=None):
         super().__init__(parent)
-        self.setFixedSize(150, 250)
+        self.setFixedSize(150, 200)
         # self.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Expanding)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(8, 8, 8, 8)

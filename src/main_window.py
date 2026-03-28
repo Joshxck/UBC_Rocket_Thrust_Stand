@@ -18,11 +18,22 @@ import serial.tools.list_ports
 from src.connection_widget import ConnectionWidget
 from src.serial_thread import SerialWorker
 from src.plotter_widget import TelemetryWidget, StreamConfig
+from src.dsp import MovingAverageFilter, LeakyIntegrator
+from src.throttle_sender import ThrottleControlWidget
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        ma_size = 6
+        li_alpha = 0.95
+
+        self.ma1 = MovingAverageFilter(ma_size)
+        self.li1 = LeakyIntegrator(li_alpha)
+
+        self.ma2 = MovingAverageFilter(ma_size)
+        self.li2 = LeakyIntegrator(li_alpha)
 
         self._set_title_and_window() # Set the window and label for the main window
         
@@ -56,6 +67,20 @@ class MainWindow(QMainWindow):
 
         self.main_layout.addWidget(self.connection_widget)
 
+        self.col = QHBoxLayout()
+        self.main_layout.addLayout(self.col)
+
+        self.controls_layout = QVBoxLayout()
+        self.data_layout = QVBoxLayout()
+        self.col.addLayout(self.controls_layout)
+        self.col.addLayout(self.data_layout)
+
+        # CONTROLS LAYOUT
+
+        self.throttle_sender = ThrottleControlWidget()
+        self.throttle_sender.send_throttle.connect(self._send_throttle)
+        self.controls_layout.addWidget(self.throttle_sender)
+
         # FIRST ROW
         self.first_row = QHBoxLayout()
 
@@ -78,11 +103,38 @@ class MainWindow(QMainWindow):
         self.first_row.addWidget(self.thrust_widget, stretch=1)
         self.first_row.addWidget(self.torque_widget, stretch=1)
 
-        self.main_layout.addLayout(self.first_row)
+        self.data_layout.addLayout(self.first_row)
 
         # SECOND ROW
 
         self.second_row = QHBoxLayout()
+
+        self.throttle_widget_1 = TelemetryWidget(
+            streams=[
+                StreamConfig(name="Throttle 1", unit="%"),
+                StreamConfig(name="Throttle 2", unit="%")
+            ],
+            history_seconds=30,
+            sample_rate_hz=100,
+        )
+
+        self.throttle_widget_2 = TelemetryWidget(
+            streams=[
+                StreamConfig(name="Average Throttle", unit="%"),
+                StreamConfig(name="Diff Throttle", unit="%"),
+            ],
+            history_seconds=30,
+            sample_rate_hz=100,
+        )
+
+        self.second_row.addWidget(self.throttle_widget_1, stretch=1)
+        self.second_row.addWidget(self.throttle_widget_2, stretch=1)
+
+        self.data_layout.addLayout(self.second_row)
+
+        # THIRD ROW
+
+        self.third_row = QHBoxLayout()
 
         self.rpm_widget = TelemetryWidget(
             streams=[
@@ -103,10 +155,15 @@ class MainWindow(QMainWindow):
             sample_rate_hz=100,
         )
 
-        self.second_row.addWidget(self.rpm_widget, stretch=1)
-        self.second_row.addWidget(self.voltage_widget, stretch=1)
+        self.third_row.addWidget(self.rpm_widget, stretch=1)
+        self.third_row.addWidget(self.voltage_widget, stretch=1)
 
-        self.main_layout.addLayout(self.second_row)
+        self.data_layout.addLayout(self.third_row)
+    
+
+    def _send_throttle(self, throttle1:float, throttle2:float):
+        self.worker.set_throttle1(throttle1)
+        self.worker.set_throttle2(throttle2)
 
 
     def on_connected(self, device:str):
@@ -116,7 +173,35 @@ class MainWindow(QMainWindow):
 
 
     def handle_data(self, data:dict):
-        self.thrust_widget.push("Thrust", data["thrust"])
+        # Thrust/Torque
+        self.thrust_widget.push_stream("Thrust", data["loadcell2"])
+
+        self.torque_widget.push_stream("Torque", data["loadcell1"])
+
+        # Throttle
+
+        self.throttle_widget_1.push_stream("Throttle 1", data["throttle1"])
+        self.throttle_widget_1.push_stream("Throttle 2", data["throttle2"])
+
+        av = (data["throttle1"] + data["throttle1"])/2
+        diff = max(data["throttle1"],data["throttle2"]) - min(data["throttle1"],data["throttle2"])
+
+        self.throttle_widget_2.push_stream("Average Throttle", av)
+        self.throttle_widget_2.push_stream("Diff Throttle", diff)
+
+        # Filter RPM data
+
+        rpm1 = self.li1.update(self.ma1.update(data["rpm1"]))
+        rpm2 = self.li2.update(self.ma2.update(data["rpm2"]))
+
+        self.rpm_widget.push_stream("RPM 1", rpm1)
+        self.rpm_widget.push_stream("RPM 2", rpm2)
+
+        # Voltages
+
+        self.voltage_widget.push_stream("V1", data["cell1_v"])
+        self.voltage_widget.push_stream("V2", data["cell2_v"])
+        self.voltage_widget.push_stream("V3", data["cell3_v"])
     
     
     def _set_title_and_window(self) -> None:
