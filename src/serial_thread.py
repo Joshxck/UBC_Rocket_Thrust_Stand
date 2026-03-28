@@ -111,8 +111,11 @@ class SerialWorker(QThread):
     def disarm(self):
         self._cmd_queue.put('DISARM')
 
-    def tare(self):
-        self._cmd_queue.put('TARE')
+    def tare1(self):
+        self._cmd_queue.put('TARE1')
+
+    def tare2(self):
+        self._cmd_queue.put('TARE2')
 
     def calibrate(self, channel: int, known_grams: float):
         self._cmd_queue.put(f'CAL{channel}:{known_grams:.1f}')

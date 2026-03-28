@@ -20,6 +20,8 @@ from src.serial_thread import SerialWorker
 from src.plotter_widget import TelemetryWidget, StreamConfig
 from src.dsp import MovingAverageFilter, LeakyIntegrator
 from src.throttle_sender import ThrottleControlWidget
+from src.csv_logger import CsvLoggerWidget
+
 
 
 class MainWindow(QMainWindow):
@@ -71,6 +73,7 @@ class MainWindow(QMainWindow):
         self.main_layout.addLayout(self.col)
 
         self.controls_layout = QVBoxLayout()
+        self.controls_layout.setAlignment(Qt.AlignmentFlag.AlignHCenter)
         self.data_layout = QVBoxLayout()
         self.col.addLayout(self.controls_layout)
         self.col.addLayout(self.data_layout)
@@ -81,12 +84,41 @@ class MainWindow(QMainWindow):
         self.throttle_sender.send_throttle.connect(self._send_throttle)
         self.controls_layout.addWidget(self.throttle_sender)
 
+        self.controls_layout.addSpacing(10)
+
+        self.thrust_tare_btn = QPushButton("Tare Thrust")
+        self.torque_tare_btn = QPushButton("Tare Torque")
+        self.thrust_tare_btn.pressed.connect(self._tare_thrust)
+        self.torque_tare_btn.pressed.connect(self._tare_torque)
+        self.thrust_tare_btn.setFixedSize(200, 30)
+        self.torque_tare_btn.setFixedSize(200, 30)
+        self.controls_layout.addWidget(self.thrust_tare_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.controls_layout.addWidget(self.torque_tare_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
+
+        self.controls_layout.addSpacing(10)
+
+        self.set_thrust_btn = QPushButton("Set Thrust Scale")
+        self.set_torque_btn = QPushButton("Set Thrust Scale")
+        self.set_thrust_btn.pressed.connect(self._cal_thrust_50)
+        self.set_torque_btn.pressed.connect(self._cal_torque_50)
+        self.set_thrust_btn.setFixedSize(200, 30)
+        self.set_torque_btn.setFixedSize(200, 30)
+        self.controls_layout.addWidget(self.set_thrust_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.controls_layout.addWidget(self.set_torque_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
+
+        self.controls_layout.addSpacing(10)
+
+        self.logger = CsvLoggerWidget()
+        self.controls_layout.addWidget(self.logger)
+
+        self.controls_layout.addStretch()
+
         # FIRST ROW
         self.first_row = QHBoxLayout()
 
         self.thrust_widget = TelemetryWidget(
             streams=[
-                StreamConfig(name="Thrust", unit="kg")
+                StreamConfig(name="Thrust", unit="g")
             ],
             history_seconds=30,
             sample_rate_hz=100,
@@ -94,7 +126,7 @@ class MainWindow(QMainWindow):
 
         self.torque_widget = TelemetryWidget(
             streams=[
-                StreamConfig(name="Torque", unit="kg cm")
+                StreamConfig(name="Torque", unit="g*mm")
             ],
             history_seconds=30,
             sample_rate_hz=100,
@@ -121,7 +153,7 @@ class MainWindow(QMainWindow):
         self.throttle_widget_2 = TelemetryWidget(
             streams=[
                 StreamConfig(name="Average Throttle", unit="%"),
-                StreamConfig(name="Diff Throttle", unit="%"),
+                StreamConfig(name="Diff Throttle (1-2)", unit="%"),
             ],
             history_seconds=30,
             sample_rate_hz=100,
@@ -164,12 +196,36 @@ class MainWindow(QMainWindow):
     def _send_throttle(self, throttle1:float, throttle2:float):
         self.worker.set_throttle1(throttle1)
         self.worker.set_throttle2(throttle2)
+    
 
+    def _tare_thrust(self):
+        self.worker.tare2()
+
+
+    def _tare_torque(self):
+        self.worker.tare1()
+    
+
+    def _cal_thrust_50(self):
+        self.worker.calibrate(2,50.0)
+
+
+    def _cal_torque_50(self):
+        self.worker.calibrate(1,50.0)
 
     def on_connected(self, device:str):
         self.worker = SerialWorker(device)
         self.worker.data_received.connect(self.handle_data)
         self.worker.start()
+
+        self.worker.data_received.connect(
+            self.logger.backend.on_data_received
+        )
+
+        # Optional: show a live row counter in your status bar
+        self.logger.backend.row_written.connect(
+            lambda n: self.statusBar().showMessage(f"Logging… {n} rows")
+        )
 
 
     def handle_data(self, data:dict):
@@ -184,7 +240,7 @@ class MainWindow(QMainWindow):
         self.throttle_widget_1.push_stream("Throttle 2", data["throttle2"])
 
         av = (data["throttle1"] + data["throttle1"])/2
-        diff = max(data["throttle1"],data["throttle2"]) - min(data["throttle1"],data["throttle2"])
+        diff = data["throttle1"] - data["throttle2"]
 
         self.throttle_widget_2.push_stream("Average Throttle", av)
         self.throttle_widget_2.push_stream("Diff Throttle", diff)
