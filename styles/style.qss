@@ -12,6 +12,9 @@ QPushButton#delete-button {
     background-color: red;
     color: white;
 }
+QPushButton#delete-button:hover {
+    background-color: #8b0000;
+}
 QLineEdit {
     border-radius: 5px;
     padding: 5px;

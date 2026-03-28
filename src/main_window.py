@@ -98,7 +98,7 @@ class MainWindow(QMainWindow):
         self.controls_layout.addSpacing(20)
 
         self.set_thrust_btn = QPushButton("Set Thrust Scale")
-        self.set_torque_btn = QPushButton("Set Thrust Scale")
+        self.set_torque_btn = QPushButton("Set Torque Scale")
         self.set_thrust_btn.pressed.connect(self._cal_thrust_50)
         self.set_torque_btn.pressed.connect(self._cal_torque_50)
         self.set_thrust_btn.setFixedSize(200, 30)
@@ -110,6 +110,14 @@ class MainWindow(QMainWindow):
 
         self.logger = CsvLoggerWidget()
         self.controls_layout.addWidget(self.logger)
+
+        self.controls_layout.addSpacing(20)
+
+        self.stop_btn = QPushButton("STOP")
+        self.stop_btn.pressed.connect(self._stop)
+        self.stop_btn.setFixedSize(200, 30)
+        self.stop_btn.setObjectName("delete-button")
+        self.controls_layout.addWidget(self.stop_btn, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         self.controls_layout.addStretch()
 
@@ -198,6 +206,11 @@ class MainWindow(QMainWindow):
         self.worker.set_throttle2(throttle2)
     
 
+    def _stop(self):
+        self.worker.set_throttle1(0.0)
+        self.worker.set_throttle2(0.0)
+    
+
     def _tare_thrust(self):
         self.worker.tare2()
 
@@ -212,6 +225,7 @@ class MainWindow(QMainWindow):
 
     def _cal_torque_50(self):
         self.worker.calibrate(1,50.0)
+
 
     def on_connected(self, device:str):
         self.worker = SerialWorker(device)
@@ -232,7 +246,7 @@ class MainWindow(QMainWindow):
         # Thrust/Torque
         self.thrust_widget.push_stream("Thrust", data["loadcell2"])
 
-        self.torque_widget.push_stream("Torque", data["loadcell1"])
+        self.torque_widget.push_stream("Torque", data["loadcell1"]*26)
 
         # Throttle
 
