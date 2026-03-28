@@ -187,6 +187,9 @@ class _ReadoutPanel(QWidget):
             header = f"{sd.cfg.name} ({sd.cfg.unit})" if sd.cfg.unit else sd.cfg.name
             layout.addWidget(QLabel(header))
             val_lbl = QLabel("—")
+            font = val_lbl.font()
+            font.setBold(True)
+            val_lbl.setFont(font)
             layout.addWidget(val_lbl)
             self._value_labels[sd.cfg.name] = val_lbl
 

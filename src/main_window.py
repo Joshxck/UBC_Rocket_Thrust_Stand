@@ -95,7 +95,7 @@ class MainWindow(QMainWindow):
         self.controls_layout.addWidget(self.thrust_tare_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
         self.controls_layout.addWidget(self.torque_tare_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
 
-        self.controls_layout.addSpacing(10)
+        self.controls_layout.addSpacing(20)
 
         self.set_thrust_btn = QPushButton("Set Thrust Scale")
         self.set_torque_btn = QPushButton("Set Thrust Scale")
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
         self.controls_layout.addWidget(self.set_thrust_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
         self.controls_layout.addWidget(self.set_torque_btn,alignment=Qt.AlignmentFlag.AlignHCenter)
 
-        self.controls_layout.addSpacing(10)
+        self.controls_layout.addSpacing(20)
 
         self.logger = CsvLoggerWidget()
         self.controls_layout.addWidget(self.logger)
