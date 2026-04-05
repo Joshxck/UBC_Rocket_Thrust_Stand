@@ -51,10 +51,12 @@ class CsvLoggerBackend(QObject):
         with QMutexLocker(self._mutex):
             if not self._logging:
                 return
+            # Prepend timestamp so it's always the first column
+            stamped = {"timestamp": datetime.now().isoformat(timespec="milliseconds")} | data
             # Capture column order from the first packet
             if self._fieldnames is None:
-                self._fieldnames = list(data.keys())
-            self._buffer.append(data)
+                self._fieldnames = list(stamped.keys())
+            self._buffer.append(stamped)
         self.row_written.emit(len(self._buffer))
 
     def save_to_file(self, filepath: str) -> int:

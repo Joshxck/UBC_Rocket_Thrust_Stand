@@ -1,0 +1,24 @@
+[
+    { "action": "tare" },
+    { "action": "arm" },
+    { "action": "wait",         "seconds": 2.0 },
+
+    { "action": "set_throttle", "value": 10 },
+    { "action": "wait",         "seconds": 5.0 },
+
+    { "action": "set_throttle", "value": 25 },
+    { "action": "wait",         "seconds": 5.0 },
+
+    { "action": "set_throttle", "value": 50 },
+    { "action": "wait",         "seconds": 5.0 },
+
+    { "action": "set_throttle", "value": 75 },
+    { "action": "wait",         "seconds": 5.0 },
+
+    { "action": "set_throttle", "value": 100 },
+    { "action": "wait",         "seconds": 5.0 },
+
+    { "action": "ramp", "motor": "both", "from": 100, "to": 0, "duration": 5.0 },
+    { "action": "wait", "seconds": 2.0 },
+    { "action": "disarm" }
+]

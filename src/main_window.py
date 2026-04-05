@@ -21,6 +21,7 @@ from src.plotter_widget import TelemetryWidget, StreamConfig
 from src.dsp import MovingAverageFilter, LeakyIntegrator
 from src.throttle_sender import ThrottleControlWidget
 from src.csv_logger import CsvLoggerWidget
+from src.script_runner import ScriptControlWidget
 
 
 
@@ -118,6 +119,14 @@ class MainWindow(QMainWindow):
         self.stop_btn.setFixedSize(200, 30)
         self.stop_btn.setObjectName("delete-button")
         self.controls_layout.addWidget(self.stop_btn, alignment=Qt.AlignmentFlag.AlignHCenter)
+
+        self.controls_layout.addSpacing(20)
+
+
+        self.script_widget = ScriptControlWidget()
+        self.script_widget.connect_logger(self.logger) # auto start/stop log
+        self.script_widget.setFixedSize(200, 120)
+        self.controls_layout.addWidget(self.script_widget,alignment=Qt.AlignmentFlag.AlignHCenter)
 
         self.controls_layout.addStretch()
 
@@ -231,6 +240,7 @@ class MainWindow(QMainWindow):
         self.worker = SerialWorker(device)
         self.worker.data_received.connect(self.handle_data)
         self.worker.start()
+        self.script_widget.connect_serial(self.worker)      # wires all commands
 
         self.worker.data_received.connect(
             self.logger.backend.on_data_received
