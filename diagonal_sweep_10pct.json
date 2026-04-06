@@ -47,6 +47,18 @@
   },
   {
     "action": "set_throttle1",
+    "value": 10
+  },
+  {
+    "action": "set_throttle2",
+    "value": 40
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
     "value": 20
   },
   {
@@ -88,6 +100,18 @@
   {
     "action": "set_throttle2",
     "value": 40
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 20
+  },
+  {
+    "action": "set_throttle2",
+    "value": 50
   },
   {
     "action": "wait",
@@ -148,6 +172,30 @@
   {
     "action": "set_throttle2",
     "value": 50
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 30
+  },
+  {
+    "action": "set_throttle2",
+    "value": 60
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 40
+  },
+  {
+    "action": "set_throttle2",
+    "value": 10
   },
   {
     "action": "wait",
@@ -208,6 +256,30 @@
   {
     "action": "set_throttle2",
     "value": 60
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 40
+  },
+  {
+    "action": "set_throttle2",
+    "value": 70
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 50
+  },
+  {
+    "action": "set_throttle2",
+    "value": 20
   },
   {
     "action": "wait",
@@ -268,6 +340,30 @@
   {
     "action": "set_throttle2",
     "value": 70
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 50
+  },
+  {
+    "action": "set_throttle2",
+    "value": 80
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 60
+  },
+  {
+    "action": "set_throttle2",
+    "value": 30
   },
   {
     "action": "wait",
@@ -328,6 +424,30 @@
   {
     "action": "set_throttle2",
     "value": 80
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 60
+  },
+  {
+    "action": "set_throttle2",
+    "value": 90
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 70
+  },
+  {
+    "action": "set_throttle2",
+    "value": 40
   },
   {
     "action": "wait",
@@ -388,6 +508,30 @@
   {
     "action": "set_throttle2",
     "value": 90
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 70
+  },
+  {
+    "action": "set_throttle2",
+    "value": 100
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 80
+  },
+  {
+    "action": "set_throttle2",
+    "value": 50
   },
   {
     "action": "wait",
@@ -459,6 +603,18 @@
   },
   {
     "action": "set_throttle2",
+    "value": 60
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 90
+  },
+  {
+    "action": "set_throttle2",
     "value": 70
   },
   {
@@ -496,6 +652,18 @@
   {
     "action": "set_throttle2",
     "value": 100
+  },
+  {
+    "action": "wait",
+    "seconds": 3.0
+  },
+  {
+    "action": "set_throttle1",
+    "value": 100
+  },
+  {
+    "action": "set_throttle2",
+    "value": 70
   },
   {
     "action": "wait",

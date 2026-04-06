@@ -25,8 +25,8 @@ import numpy as np
 
 # ─────────────────────────── CONFIG ────────────────────────────────────────
 
-INPUT_CSV   = "test.csv"   # path to your input file
-OUTPUT_CSV  = "processed_sweep.csv"  # path for the output file
+INPUT_CSV   = "log_20260405_092906.csv"   # path to your input file
+OUTPUT_CSV  = "processed_sweep_2.csv"  # path for the output file
 
 # Column names in your CSV
 TIME_COL      = "timestamp"                              # datetime column

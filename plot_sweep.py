@@ -25,8 +25,8 @@ from matplotlib.cm import ScalarMappable
 
 # ─────────────────────────── CONFIG ────────────────────────────────────────
 
-INPUT_CSV       = "processed_sweep.csv"   # output of process_motor_sweep.py
-OUTPUT_DIR      = "plots"                 # folder where PNGs are saved
+INPUT_CSV       = "processed_sweep_2.csv"   # output of process_motor_sweep.py
+OUTPUT_DIR      = "plots_2"                 # folder where PNGs are saved
 NOMINAL_VOLTAGE = 12.6                    # reference voltage for scaling (V)
 
 THROTTLE1_COL = "throttle1"
