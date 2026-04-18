@@ -271,8 +271,8 @@ class MainWindow(QMainWindow):
 
         # Filter RPM data
 
-        rpm1 = self.li1.update(self.ma1.update(data["rpm1"]))
-        rpm2 = self.li2.update(self.ma2.update(data["rpm2"]))
+        rpm1 = self.ma1.update(data["rpm1"])
+        rpm2 = self.ma2.update(data["rpm2"])
 
         self.rpm_widget.push_stream("RPM 1", rpm1)
         self.rpm_widget.push_stream("RPM 2", rpm2)

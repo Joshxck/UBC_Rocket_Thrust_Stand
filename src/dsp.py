@@ -1,7 +1,7 @@
 import collections
 
 class MovingAverageFilter:
-    def __init__(self, size=2):
+    def __init__(self, size=1):
         self.buffer = collections.deque(maxlen=size)
 
     def update(self, sample):
