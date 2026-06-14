@@ -221,11 +221,11 @@ class MainWindow(QMainWindow):
     
 
     def _tare_thrust(self):
-        self.worker.tare2()
+        self.worker.tare1()
 
 
     def _tare_torque(self):
-        self.worker.tare1()
+        self.worker.tare2()
     
 
     def _cal_thrust_50(self):
@@ -254,9 +254,9 @@ class MainWindow(QMainWindow):
 
     def handle_data(self, data:dict):
         # Thrust/Torque
-        self.thrust_widget.push_stream("Thrust", data["loadcell2"])
+        self.thrust_widget.push_stream("Thrust", data["loadcell1"])
 
-        self.torque_widget.push_stream("Torque", data["loadcell1"]*26)
+        self.torque_widget.push_stream("Torque", data["loadcell2"]*20)
 
         # Throttle
 
